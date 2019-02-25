@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<HBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="486.0" prefWidth="958.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.karolmalinowski.election.controller.LoginController">
+   <children>
+      <VBox prefHeight="486.0" prefWidth="215.0" />
+      <VBox prefHeight="486.0" prefWidth="766.0">
+         <children>
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Provide your personal data to vote" textAlignment="CENTER" wrappingWidth="411.13671875">
+               <VBox.margin>
+                  <Insets bottom="30.0" left="100.0" right="10.0" top="30.0" />
+               </VBox.margin>
+               <font>
+                  <Font size="32.0" />
+               </font>
+            </Text>
+            <HBox prefHeight="40.0" prefWidth="200.0">
+               <children>
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="NAME:" wrappingWidth="157.13671875">
+                     <font>
+                        <Font size="27.0" />
+                     </font>
+                     <HBox.margin>
+                        <Insets left="10.0" />
+                     </HBox.margin>
+                  </Text>
+                  <TextField fx:id="nameInput" prefHeight="46.0" prefWidth="521.0" />
+               </children>
+               <padding>
+                  <Insets bottom="20.0" />
+               </padding>
+            </HBox>
+            <HBox layoutX="10.0" layoutY="156.0" prefHeight="40.0" prefWidth="200.0">
+               <children>
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="SURNAME:" wrappingWidth="157.13671875">
+                     <font>
+                        <Font size="27.0" />
+                     </font>
+                     <HBox.margin>
+                        <Insets left="10.0" />
+                     </HBox.margin>
+                  </Text>
+                  <TextField fx:id="surnameInput" prefHeight="46.0" prefWidth="521.0" />
+               </children>
+               <padding>
+                  <Insets bottom="20.0" />
+               </padding>
+            </HBox>
+            <HBox layoutX="10.0" layoutY="215.0" prefHeight="40.0" prefWidth="200.0">
+               <children>
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="PESEL:" wrappingWidth="157.13671875">
+                     <font>
+                        <Font size="27.0" />
+                     </font>
+                     <HBox.margin>
+                        <Insets left="10.0" />
+                     </HBox.margin>
+                  </Text>
+                  <TextField fx:id="peselInput" prefHeight="46.0" prefWidth="521.0" />
+               </children>
+               <padding>
+                  <Insets bottom="20.0" />
+               </padding>
+            </HBox>
+            <Button fx:id="voteButton" alignment="TOP_CENTER" mnemonicParsing="false" prefHeight="50.0" prefWidth="293.0" text="VOTE" textAlignment="CENTER">
+               <font>
+                  <Font size="23.0" />
+               </font>
+               <VBox.margin>
+                  <Insets left="50.0" top="50.0" />
+               </VBox.margin>
+            </Button>
+         </children>
+      </VBox>
+   </children>
+</HBox>
