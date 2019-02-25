@@ -1,19 +1,30 @@
 package com.karolmalinowski.election.controller;
 
-import com.karolmalinowski.election.model.Person;
-import com.karolmalinowski.election.service.interfaces.PersonService;
+import com.karolmalinowski.election.ElectionApplication;
+import com.karolmalinowski.election.model.Voter;
+import com.karolmalinowski.election.service.interfaces.VoterService;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.Pane;
+import javafx.stage.Stage;
+import javafx.stage.StageStyle;
+import org.springframework.beans.factory.BeanFactoryAware;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
+import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 
+import java.io.IOException;
+
 @Controller
 public class LoginController{
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+    private final String votingWindowPath = "fxml/votingPage.fxml";
     @FXML
     private TextField nameInput;
     @FXML
@@ -24,19 +35,35 @@ public class LoginController{
     private Button voteButton;
 
     @Autowired
-    PersonService personService;
+    private ApplicationContext appContext;
+
+    @Autowired
+    VoterService voterService;
 
     public void initialize(){
         voteButton.setOnAction(event -> login());
     }
 
     private void login() {
-        Person person = new Person();
-        person.setName(nameInput.getText());person.setSurname(surnameInput.getText());person.setPesel(passwordEncoder.encode(peselInput.getText()));
         try {
-            personService.valid(person);
+            Voter voter = voterService.createVoterInstance(nameInput.getText(), surnameInput.getText(), peselInput.getText());
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getClassLoader().getResource(votingWindowPath));
+            fxmlLoader.setControllerFactory(appContext::getBean);
+            Stage stage = new Stage(StageStyle.DECORATED);
+            stage.setScene(
+                    new Scene(
+                            fxmlLoader.load()
+                    )
+            );
+            VotingController controller =
+                    fxmlLoader.getController();
+            //controller.initData(voter);
+            stage.show();
         }catch (IllegalArgumentException e){
             new Alert(Alert.AlertType.INFORMATION, e.getMessage()).showAndWait();
+        }catch(IOException e){
+            e.printStackTrace();
+            new Alert(Alert.AlertType.ERROR, "Cannot load voting page" + e.toString()).showAndWait();
         }
     }
 

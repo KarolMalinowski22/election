@@ -1,8 +1,13 @@
 package com.karolmalinowski.election;
 
+import com.karolmalinowski.election.service.DefaultVotingService;
+import com.karolmalinowski.election.service.interfaces.VotingService;
 import javafx.application.Application;
 import javafx.application.HostServices;
 import javafx.application.Platform;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.stage.Stage;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -11,12 +16,12 @@ import org.springframework.context.ApplicationContextInitializer;
 import org.springframework.context.ApplicationEvent;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.support.GenericApplicationContext;
-
+//This one runs javaFx application
 public class ElectionApplication extends Application{
 private ConfigurableApplicationContext context;
 
 	@Override
-	public void init() throws Exception {
+	public void init(){
 		ApplicationContextInitializer<GenericApplicationContext> initializer =
 		new ApplicationContextInitializer<GenericApplicationContext>() {
 			@Override
@@ -33,14 +38,29 @@ private ConfigurableApplicationContext context;
 	}
 
 	@Override
-	public void start(Stage primaryStage) throws Exception {
+	public void start(Stage primaryStage){
+		//when initialization is finished, then create stage etc.
 		this.context.publishEvent(new StageReadyEvent(primaryStage));
 	}
 
 	@Override
-	public void stop() throws Exception {
+	public void stop(){
+		//close spring application
 		this.context.close();
+		//and close platform of javaFx application
 		Platform.exit();
+	}
+	public void showNewWindow()  {
+		try {
+			FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("fxml/votingPage.fxml"));
+			fxmlLoader.setControllerFactory(context::getBean);
+			Parent root1 = fxmlLoader.load();
+			Stage stage = new Stage();
+			stage.setScene(new Scene(root1));
+			stage.show();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 }
 class StageReadyEvent extends ApplicationEvent {

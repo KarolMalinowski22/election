@@ -7,6 +7,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class Main {
     public static void main(String[] args) {
 //		SpringApplication.run(ElectionApplication.class, args);
+
+        //this line runs launch from javaFx application class
         Application.launch(ElectionApplication.class, args);
     }
 }
