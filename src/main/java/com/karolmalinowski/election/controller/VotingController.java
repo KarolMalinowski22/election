@@ -54,7 +54,7 @@ public class VotingController {
         Alert internalErrorMessage = new Alert(Alert.AlertType.ERROR, "Internal error. Contact staff immediately.");
         List<Candidate> votedForCandidates = new ArrayList<>();
 
-        if (voter.getCandidate() != null && voter.getCandidate().size() > 0) {
+        if (voterService.findByPesel(voter.getPesel()).isPresent()) {
             new Alert(Alert.AlertType.INFORMATION, "You have voted already!").showAndWait();
             return;
         }
@@ -87,8 +87,6 @@ public class VotingController {
         } else {
             buttonType = new Alert(Alert.AlertType.CONFIRMATION, confirmationMessageIncorrectVote).showAndWait();
             candidate = null;
-            votedForCandidates.clear();
-            votedForCandidates.add(candidate);
         }
 
 
@@ -97,7 +95,7 @@ public class VotingController {
                 new Alert(Alert.AlertType.INFORMATION, "You have been deprived voting rights.").showAndWait();
                 return;
             } else {
-                voter.setCandidate(votedForCandidates);
+                voter.setCandidate(candidate);
                 if (voterService.voteFor(voter, candidate)) {
                     new Alert(Alert.AlertType.INFORMATION, "Success. Thank you for your vote").showAndWait();
                 }

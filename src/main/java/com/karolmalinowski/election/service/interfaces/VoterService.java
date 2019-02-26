@@ -3,6 +3,8 @@ package com.karolmalinowski.election.service.interfaces;
 import com.karolmalinowski.election.model.Candidate;
 import com.karolmalinowski.election.model.Voter;
 
+import java.util.Optional;
+
 public interface VoterService {
     /**
      * Validate Voter object passed.
@@ -20,4 +22,6 @@ public interface VoterService {
      * @return
      */
     boolean voteFor(Voter voter, Candidate candidate);
+
+    Optional<Voter> findByPesel(String pesel);
 }

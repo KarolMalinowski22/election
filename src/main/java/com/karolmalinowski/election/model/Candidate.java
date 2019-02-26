@@ -19,7 +19,7 @@ public class Candidate {
     private Long id;
     private String name;
     private String party;
-    @ManyToMany(mappedBy = "candidate")
+    @OneToMany
     private List<Voter> voters;
     public Candidate(String name, String party){
         this.name = name;

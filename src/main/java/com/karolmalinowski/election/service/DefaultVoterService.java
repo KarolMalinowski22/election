@@ -1,22 +1,15 @@
 package com.karolmalinowski.election.service;
 
-import com.google.gson.Gson;
 import com.karolmalinowski.election.model.Candidate;
 import com.karolmalinowski.election.model.Voter;
-import com.karolmalinowski.election.model.json.DisallowedBoxJson;
-import com.karolmalinowski.election.model.json.DisallowedPerson;
 import com.karolmalinowski.election.repository.VoterRepository;
 import com.karolmalinowski.election.service.interfaces.VoterService;
 import com.karolmalinowski.election.service.tools.PeselTools;
-import com.karolmalinowski.election.service.tools.UrlTools;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Optional;
 
 @Service
 public class DefaultVoterService implements VoterService {
@@ -33,7 +26,7 @@ public class DefaultVoterService implements VoterService {
         Voter voter = new Voter();
         voter.setName(name);
         voter.setSurname(surname);
-        voter.setPesel(passwordEncoder.encode(pesel));
+        voter.setPesel(String.valueOf(pesel.hashCode()));
         return voter;
     }
 
@@ -41,6 +34,11 @@ public class DefaultVoterService implements VoterService {
     public boolean voteFor(Voter voter, Candidate candidate) {
         voterRepository.save(voter);
         return true;
+    }
+
+    @Override
+    public Optional<Voter> findByPesel(String pesel) {
+        return voterRepository.findAllByPesel(pesel);
     }
 
     @Override
@@ -57,7 +55,7 @@ public class DefaultVoterService implements VoterService {
         } catch (IllegalArgumentException e) {
             errorMessage += e.getMessage() + "\n";
         }
-        if (voterRepository.findAllByPesel(passwordEncoder.encode(pesel)).isPresent()) {
+        if (voterRepository.findAllByPesel(String.valueOf(pesel.hashCode())).isPresent()) {
             errorMessage += "-Voter of " + pesel + " have voted already.\n";
         }
         if (PeselTools.disallowed(pesel)) {
@@ -72,7 +70,6 @@ public class DefaultVoterService implements VoterService {
             throw new IllegalArgumentException(errorMessage);
         }
     }
-
 
 
 }

@@ -9,7 +9,6 @@ import com.karolmalinowski.election.service.tools.UrlTools;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -40,11 +39,9 @@ public class DefaultCandidateService implements CandidateService {
             Gson gson = new Gson();
             CandidatesBoxJson candidates = gson.fromJson(readUrl, CandidatesBoxJson.class);
 
-            for (Candidate candidate : candidates.getCandidates().getCandidate()){
+            for (Candidate candidate : candidates.getCandidates().getCandidate()) {
                 candidateRepository.save(candidate);
             }
-            candidateRepository.save(new Candidate("invalidVote", ""));
-
         } catch (Exception e) {
             e.printStackTrace();
         }
