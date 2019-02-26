@@ -1,16 +1,14 @@
-package com.karolmalinowski.election.model.xml;
+package com.karolmalinowski.election.model.json;
 
 import com.karolmalinowski.election.model.Candidate;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
-
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
-public class Candidates {
+public class CandidatesJson {
     private String publicationDate;
-    private List<Candidate> candidates;
+    private Candidate[] candidate;
 }

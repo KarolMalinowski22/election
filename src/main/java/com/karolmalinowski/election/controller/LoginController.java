@@ -1,6 +1,5 @@
 package com.karolmalinowski.election.controller;
 
-import com.karolmalinowski.election.ElectionApplication;
 import com.karolmalinowski.election.model.Voter;
 import com.karolmalinowski.election.service.interfaces.VoterService;
 import javafx.fxml.FXML;
@@ -9,15 +8,10 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-import org.springframework.beans.factory.BeanFactoryAware;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationContextAware;
-import org.springframework.context.ConfigurableApplicationContext;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 
 import java.io.IOException;
@@ -57,7 +51,7 @@ public class LoginController{
             );
             VotingController controller =
                     fxmlLoader.getController();
-            //controller.initData(voter);
+            controller.initData(voter);
             stage.show();
         }catch (IllegalArgumentException e){
             new Alert(Alert.AlertType.INFORMATION, e.getMessage()).showAndWait();

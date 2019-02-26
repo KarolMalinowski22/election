@@ -5,7 +5,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.util.Set;
+import java.util.List;
 
 @Entity
 @Setter
@@ -17,8 +17,8 @@ public class Candidate {
     private Long id;
     private String name;
     private String party;
-    @OneToMany(mappedBy = "candidate", cascade = CascadeType.ALL)
-    private Set<Voter> voters;
+    @ManyToMany(mappedBy = "candidate", cascade = CascadeType.ALL)
+    private List<Voter> voters;
     public Candidate(String name, String party){
         this.name = name;
         this.party = party;

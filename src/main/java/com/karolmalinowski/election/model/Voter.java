@@ -5,6 +5,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Getter
 @Setter
@@ -17,7 +18,9 @@ public class Voter {
     private String name;
     private String surname;
     private String pesel;
-    @ManyToOne
-    @JoinColumn(name = "candidateId")
-    private Candidate candidate;
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(name = "vote",
+            joinColumns = @JoinColumn(name = "voterId"),
+            inverseJoinColumns = @JoinColumn(name = "candidateId"))
+    private List<Candidate> candidate;
 }
