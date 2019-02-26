@@ -6,6 +6,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.List;
+import java.util.Optional;
 
 @Getter
 @Setter
@@ -18,7 +19,7 @@ public class Voter {
     private String name;
     private String surname;
     private String pesel;
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany
     @JoinTable(name = "vote",
             joinColumns = @JoinColumn(name = "voterId"),
             inverseJoinColumns = @JoinColumn(name = "candidateId"))

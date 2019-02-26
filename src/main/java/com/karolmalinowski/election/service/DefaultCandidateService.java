@@ -9,6 +9,7 @@ import com.karolmalinowski.election.service.tools.UrlTools;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -17,10 +18,11 @@ public class DefaultCandidateService implements CandidateService {
     private final String candidatesUrl = "http://webtask.future-processing.com:8069/candidates";
     @Autowired
     CandidateRepository candidateRepository;
+
     @Override
     public List<Candidate> findAllCandidates() {
         List<Candidate> all = candidateRepository.findAll();
-        if(all.size() == 0){
+        if (all.size() == 0) {
             loadCandidatesToDB();
             all = candidateRepository.findAll();
         }
@@ -32,15 +34,17 @@ public class DefaultCandidateService implements CandidateService {
         return candidateRepository.findById(id);
     }
 
-    private void loadCandidatesToDB(){
+    private void loadCandidatesToDB() {
         try {
             String readUrl = UrlTools.readUrl(candidatesUrl);
             Gson gson = new Gson();
             CandidatesBoxJson candidates = gson.fromJson(readUrl, CandidatesBoxJson.class);
 
-            System.out.println(candidates.getCandidates().getPublicationDate());
-            for (Candidate candidate : candidates.getCandidates().getCandidate())
+            for (Candidate candidate : candidates.getCandidates().getCandidate()){
                 candidateRepository.save(candidate);
+            }
+            candidateRepository.save(new Candidate("invalidVote", ""));
+
         } catch (Exception e) {
             e.printStackTrace();
         }

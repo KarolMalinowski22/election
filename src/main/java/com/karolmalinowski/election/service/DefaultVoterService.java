@@ -39,11 +39,6 @@ public class DefaultVoterService implements VoterService {
 
     @Override
     public boolean voteFor(Voter voter, Candidate candidate) {
-        List<Candidate> candidates = voter.getCandidate();
-        if(candidates == null){
-            candidates = new ArrayList<>();
-        }
-        candidates.add(candidate);
         voterRepository.save(voter);
         return true;
     }

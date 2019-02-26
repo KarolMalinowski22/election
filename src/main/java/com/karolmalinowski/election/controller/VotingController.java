@@ -52,10 +52,10 @@ public class VotingController {
 
     private void vote() {
         Alert internalErrorMessage = new Alert(Alert.AlertType.ERROR, "Internal error. Contact staff immediately.");
-        List<Long> votedForCandidatesId = new ArrayList<>();
+        List<Candidate> votedForCandidates = new ArrayList<>();
 
         if (voter.getCandidate() != null && voter.getCandidate().size() > 0) {
-            new Alert(Alert.AlertType.INFORMATION, "You have voted already!");
+            new Alert(Alert.AlertType.INFORMATION, "You have voted already!").showAndWait();
             return;
         }
         for (Node child : gridPane.getChildren()) {
@@ -63,7 +63,10 @@ public class VotingController {
                 if (((CheckBox) child).isSelected()) {
                     String idString = child.getId();
                     if (idString.matches("\\d*")) {
-                        votedForCandidatesId.add(Long.valueOf(idString));
+                        Optional<Candidate> byId = candidateService.findById(Long.valueOf(idString));
+                        if (byId.isPresent()) {
+                            votedForCandidates.add(byId.get());
+                        }
                     } else {
                         return;
                     }
@@ -73,37 +76,30 @@ public class VotingController {
 
         Optional<ButtonType> buttonType;
         Candidate candidate;
-        //if voted for only one candidate
-        if (votedForCandidatesId.size() == 1) {
-            Optional<Candidate> byId = candidateService.findById(votedForCandidatesId.get(0));
-            if (byId.isPresent()) {
-                candidate = byId.get();
-            } else {
-                internalErrorMessage.showAndWait();
-                return;
-            }
 
-
+        //Confirmation
+        if (votedForCandidates.size() == 1) {
+            //if voted for only one candidate
+            candidate = votedForCandidates.get(0);
             buttonType = new Alert(Alert.AlertType.CONFIRMATION,
                     "You are voting for " + candidate.getName() + " from " + candidate.getParty() + " party." +
                             "Is that correct?").showAndWait();
-            if (buttonType.isPresent() && buttonType.get() == ButtonType.OK) {
-            } else {
-            }
-
-        }else{
+        } else {
             buttonType = new Alert(Alert.AlertType.CONFIRMATION, confirmationMessageIncorrectVote).showAndWait();
             candidate = null;
+            votedForCandidates.clear();
+            votedForCandidates.add(candidate);
         }
+
+
         if (buttonType.isPresent() && buttonType.get() == ButtonType.OK) {
-
-
             if (PeselTools.disallowed(voter.getPesel())) {
                 new Alert(Alert.AlertType.INFORMATION, "You have been deprived voting rights.").showAndWait();
                 return;
             } else {
+                voter.setCandidate(votedForCandidates);
                 if (voterService.voteFor(voter, candidate)) {
-                    new Alert(Alert.AlertType.INFORMATION, "Success. Thank you for your vote");
+                    new Alert(Alert.AlertType.INFORMATION, "Success. Thank you for your vote").showAndWait();
                 }
             }
         }

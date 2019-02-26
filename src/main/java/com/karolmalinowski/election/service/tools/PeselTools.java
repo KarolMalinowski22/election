@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.karolmalinowski.election.model.json.DisallowedBoxJson;
 import com.karolmalinowski.election.model.json.DisallowedPerson;
 
+import java.time.DateTimeException;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.Date;
@@ -26,11 +27,11 @@ public class PeselTools {
      */
     public static void valid(String pesel) throws IllegalArgumentException{
         pesel = pesel.trim();
-        if(!pesel.matches("\\d{11}")){
-            throw new IllegalArgumentException("-Pesel should only be numbers");
-        }
         if(pesel.length() != peselLength){
             throw new IllegalArgumentException("-Pesel number length is incorrect.");
+        }
+        if(!pesel.matches("\\d{11}")){
+            throw new IllegalArgumentException("-Pesel should only be numbers");
         }
         if(!(LocalDate.now().minusYears(adultAge).compareTo(getBirthdate(pesel))>=0)){
             throw new IllegalArgumentException("-You must be at least 18 years old.");
@@ -59,8 +60,13 @@ public class PeselTools {
             actualMonth = peselMonth;
         }
         actualDay = peselDay;
-
-        return LocalDate.of(Integer.valueOf(actualYear), Integer.valueOf(actualMonth), Integer.valueOf(actualDay));
+        LocalDate date;
+        try {
+            date = LocalDate.of(Integer.valueOf(actualYear), Integer.valueOf(actualMonth), Integer.valueOf(actualDay));
+        }catch(DateTimeException e){
+            throw new IllegalArgumentException("-Pesel number is incorrect.");
+        }
+        return date;
     }
 
     /**
