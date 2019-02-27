@@ -53,7 +53,7 @@ public class StatisticsController {
     @FXML
     Button exportCsvButton;
     @FXML
-    Button exportPdfButton;
+    Button exitButton;
     @FXML
     SplitPane splitPane;
     @FXML
@@ -70,7 +70,10 @@ public class StatisticsController {
         barGraphButton.setOnAction(event -> showBarGraph());
         numericGraphButton.setOnAction(event -> showNumericGraph());
         exportCsvButton.setOnAction(event -> exportCsv((Stage)exportCsvButton.getScene().getWindow()));
+        exitButton.setOnAction(event -> exit((Stage)exportCsvButton.getScene().getWindow()));
     }
+
+
 
     private void showBarGraph() {
         splitPane.setDividerPosition(0, 0);
@@ -190,5 +193,8 @@ public class StatisticsController {
         }else{
             Export.statictics(selectedFile, electionStatistics);
         }
+    }
+    private void exit(Stage window) {
+        window.close();
     }
 }
