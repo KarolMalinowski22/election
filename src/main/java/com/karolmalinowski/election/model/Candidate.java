@@ -19,7 +19,7 @@ public class Candidate {
     private Long id;
     private String name;
     private String party;
-    @OneToMany
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "candidate")
     private List<Voter> voters;
     public Candidate(String name, String party){
         this.name = name;

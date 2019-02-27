@@ -3,6 +3,8 @@ package com.karolmalinowski.election.service.interfaces;
 import com.karolmalinowski.election.model.Candidate;
 import com.karolmalinowski.election.model.Voter;
 
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 public interface VoterService {
@@ -24,4 +26,9 @@ public interface VoterService {
     boolean voteFor(Voter voter, Candidate candidate);
 
     Optional<Voter> findByPesel(String pesel);
+
+    List<Voter> findAllVoters();
+
+    void addDisallowedTry();
+    Long countDisallowed();
 }

@@ -1,7 +1,9 @@
 package com.karolmalinowski.election.service;
 
 import com.karolmalinowski.election.model.Candidate;
+import com.karolmalinowski.election.model.DisallowedVotingTry;
 import com.karolmalinowski.election.model.Voter;
+import com.karolmalinowski.election.repository.DisallowedVotingTriesRepository;
 import com.karolmalinowski.election.repository.VoterRepository;
 import com.karolmalinowski.election.service.interfaces.VoterService;
 import com.karolmalinowski.election.service.tools.PeselTools;
@@ -9,16 +11,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
 public class DefaultVoterService implements VoterService {
-    private final int peselLength = 11;
     @Autowired
     PasswordEncoder passwordEncoder;
     @Autowired
     VoterRepository voterRepository;
-
+    @Autowired
+    DisallowedVotingTriesRepository disallowedVotingTriesRepository;
 
     @Override
     public Voter createVoterInstance(String name, String surname, String pesel) throws IllegalArgumentException {
@@ -42,6 +45,11 @@ public class DefaultVoterService implements VoterService {
     }
 
     @Override
+    public List<Voter> findAllVoters() {
+        return voterRepository.findAll();
+    }
+
+    @Override
     public void valid(String name, String surname, String pesel) throws IllegalArgumentException {
         String errorMessage = "";
         if ("".equals(name)) {
@@ -54,9 +62,6 @@ public class DefaultVoterService implements VoterService {
             PeselTools.valid(pesel);
         } catch (IllegalArgumentException e) {
             errorMessage += e.getMessage() + "\n";
-        }
-        if (voterRepository.findAllByPesel(String.valueOf(pesel.hashCode())).isPresent()) {
-            errorMessage += "-Voter of " + pesel + " have voted already.\n";
         }
         if (PeselTools.disallowed(pesel)) {
             errorMessage += "-You have no voting rights.\n";
@@ -71,5 +76,13 @@ public class DefaultVoterService implements VoterService {
         }
     }
 
+    @Override
+    public void addDisallowedTry() {
+        disallowedVotingTriesRepository.save(new DisallowedVotingTry());
+    }
 
+    @Override
+    public Long countDisallowed() {
+        return disallowedVotingTriesRepository.count();
+    }
 }

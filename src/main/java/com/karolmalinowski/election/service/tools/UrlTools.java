@@ -5,6 +5,12 @@ import java.io.InputStreamReader;
 import java.net.URL;
 
 public class UrlTools {
+    /**
+     * Reads content of url to string.
+     * @param urlString
+     * @return
+     * @throws Exception
+     */
     public static String readUrl(String urlString) throws Exception {
         BufferedReader reader = null;
         try {

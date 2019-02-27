@@ -53,6 +53,7 @@ public class LoginController{
                     fxmlLoader.getController();
             controller.initData(voter);
             stage.show();
+            ((Stage)voteButton.getScene().getWindow()).close();
         }catch (IllegalArgumentException e){
             new Alert(Alert.AlertType.INFORMATION, e.getMessage()).showAndWait();
         }catch(IOException e){
