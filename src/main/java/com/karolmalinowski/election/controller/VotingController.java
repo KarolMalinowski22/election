@@ -1,5 +1,6 @@
 package com.karolmalinowski.election.controller;
 
+import com.itextpdf.text.FontFactory;
 import com.karolmalinowski.election.model.Candidate;
 import com.karolmalinowski.election.model.Voter;
 import com.karolmalinowski.election.service.interfaces.CandidateService;
@@ -21,6 +22,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Controller;
 
@@ -31,6 +33,7 @@ import java.util.Optional;
 
 @Controller
 public class VotingController {
+
     private Voter voter;
     @FXML
     GridPane gridPane;
@@ -89,10 +92,11 @@ public class VotingController {
      */
     private void createCandidatesTableOnGrid(List<Candidate> allCandidates) {
         int i = 1;
+        String FONT = "fonts/Amble-Regular.ttf";
         for (Candidate candidate :
                 allCandidates) {
             Text text = new Text(" Name: " + candidate.getName() + "\n Party: " + candidate.getParty());
-            text.setFont(new Font(15));
+            text.setFont(new Font("Arial",15));
             gridPane.add(text, 0, i);
             CheckBox checkBox = new CheckBox();
             checkBox.setPadding(new Insets(0, 0, 10, 10));
@@ -104,7 +108,7 @@ public class VotingController {
 
     /**
      * After bunch of checks voter is saved into the system, what means, he voted.
-     * Optionally, when vote is valid, a vote entity is also saved into the db.
+     * Optionally, when the vote is valid, a vote entity is also saved into the db.
      */
     private void vote() {
         Alert internalErrorMessage = new Alert(Alert.AlertType.ERROR, "Internal error. Contact staff immediately.");

@@ -3,6 +3,7 @@ package com.karolmalinowski.election.service.tools;
 import com.google.gson.Gson;
 import com.karolmalinowski.election.model.json.DisallowedBoxJson;
 import com.karolmalinowski.election.model.json.DisallowedPerson;
+import org.springframework.beans.factory.annotation.Value;
 
 import java.time.DateTimeException;
 import java.time.LocalDate;
@@ -17,8 +18,12 @@ import java.util.stream.Collectors;
 public class PeselTools {
     private static final int peselLength = 11;
     private static final int adultAge = 18;
-    private static String disallowedUrl = "http://webtask.future-processing.com:8069/blocked";
+    @Value("${voters.disallowed.json}")
+    private static String disallowedUrl;
 
+    public static void setDisallowedUrl(String disallowedUrl) {
+        PeselTools.disallowedUrl = disallowedUrl;
+    }
 
     /**
      * Validates that pesel number is digits, is correct length and if person is adult.

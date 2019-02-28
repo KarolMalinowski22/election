@@ -7,6 +7,7 @@ import com.karolmalinowski.election.repository.CandidateRepository;
 import com.karolmalinowski.election.service.interfaces.CandidateService;
 import com.karolmalinowski.election.service.tools.UrlTools;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,7 +15,8 @@ import java.util.Optional;
 
 @Service("votingService")
 public class DefaultCandidateService implements CandidateService {
-    private final String candidatesUrl = "http://webtask.future-processing.com:8069/candidates";
+    @Value("${candidates.list.json}")
+    private String candidatesUrl;
     @Autowired
     CandidateRepository candidateRepository;
 

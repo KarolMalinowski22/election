@@ -2,6 +2,7 @@ package com.karolmalinowski.election.controller;
 
 import com.karolmalinowski.election.model.Voter;
 import com.karolmalinowski.election.service.interfaces.VoterService;
+import com.karolmalinowski.election.service.tools.PeselTools;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -11,6 +12,7 @@ import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Controller;
 
@@ -18,6 +20,8 @@ import java.io.IOException;
 
 @Controller
 public class LoginController{
+    @Value("${voters.disallowed.json}")
+    private String disallowedUrl;
     private final String votingWindowPath = "fxml/votingPage.fxml";
     @FXML
     private TextField nameInput;
@@ -35,6 +39,7 @@ public class LoginController{
     VoterService voterService;
 
     public void initialize(){
+        PeselTools.setDisallowedUrl(disallowedUrl);
         voteButton.setOnAction(event -> login());
     }
 
